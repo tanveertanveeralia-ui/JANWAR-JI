@@ -96,17 +96,16 @@ body {
 #intro {
     position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, #ff8ce3, #8c52ff);
+    z-index: 9999; /* On top of everything */
     display: flex;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(135deg, #ff8ce3, #8c52ff);
     color: white;
     font-size: 1.7rem;
     font-weight: bold;
     text-align: center;
-    z-index: 15;
     cursor: pointer;
-    user-select: none;
 }
 
 /* Main Content */
@@ -226,24 +225,21 @@ const main=document.getElementById("mainContent");
 const stepContent=document.getElementById("stepContent");
 const popSound=document.getElementById("popSound");
 
-// Play sound on interaction
 function playPop(){ popSound.currentTime=0; popSound.play(); }
 
-// Start interaction
+// Intro click
 intro.addEventListener("click",()=>{
     intro.style.display="none";
     main.style.display="block";
 
-    // Confetti
     confetti({ particleCount: 150, spread: 70, origin: { y:0.6 } });
 
-    // Hearts, sparkles, bubbles
     setInterval(createHeart, 400);
     setInterval(createSparkle, 250);
     setInterval(createBubble, 2000);
 });
 
-// Hearts
+// Hearts, sparkles, bubbles
 function createHeart(){
     const heart=document.createElement("div");
     heart.classList.add("heart");
@@ -253,8 +249,6 @@ function createHeart(){
     document.body.appendChild(heart);
     setTimeout(()=>heart.remove(),6000);
 }
-
-// Sparkles
 function createSparkle(){
     const sparkle=document.createElement("div");
     sparkle.classList.add("sparkle");
@@ -263,8 +257,6 @@ function createSparkle(){
     document.body.appendChild(sparkle);
     setTimeout(()=>sparkle.remove(),6000);
 }
-
-// Bubbles
 function createBubble(){
     const bubble=document.createElement("div");
     bubble.classList.add("bubble");
@@ -277,17 +269,17 @@ function createBubble(){
     setTimeout(()=>bubble.remove(),11000);
 }
 
-// Teddy jumps on text/buttons
+// Teddy jumps
 function createTeddy(element){
     const teddy=document.createElement("div");
     teddy.classList.add("teddy");
     teddy.innerHTML="🧸";
     const rect=element.getBoundingClientRect();
     teddy.style.top=(rect.top + window.scrollY - 25)+"px";
-    teddy.style.left=(rect.left + rect.width/2 - 14)+"px;
+    teddy.style.left=(rect.left + rect.width/2 - 14)+"px";
     document.body.appendChild(teddy);
     setTimeout(()=>teddy.remove(),1000);
-    playPop(); // sound on teddy jump
+    playPop();
 }
 
 // Fade helper
@@ -296,7 +288,6 @@ function fadeTo(newContent){
     setTimeout(()=>{
         stepContent.innerHTML=newContent;
         stepContent.classList.add("show");
-        // Teddy jumps on headings and buttons
         stepContent.querySelectorAll("button,h1").forEach(el=>{
             el.addEventListener("click",playPop);
             setInterval(()=>createTeddy(el),1500);

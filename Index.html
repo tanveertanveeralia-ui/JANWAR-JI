@@ -10,7 +10,7 @@
 <style>
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
     overflow-x: hidden;
     position: relative;
@@ -98,8 +98,9 @@ body {
     width: 100%;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.3);
     margin-bottom: 20px;
+    background: #000;
 }
 
 video {
@@ -117,10 +118,11 @@ video {
     line-height: 1.8;
     position: relative;
     z-index: 2;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
 button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     margin: 10px;
     border: none;
     border-radius: 15px;
@@ -128,11 +130,14 @@ button {
     color: white;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.3s;
     position: relative;
     z-index: 2;
 }
-button:hover { background: #ff4081; }
+button:hover { 
+    background: #ff4081; 
+    transform: scale(1.05);
+}
 
 .spotify-embed {
     margin-bottom: 20px;
@@ -153,7 +158,7 @@ button:hover { background: #ff4081; }
     z-index: 9999;
     text-align: center;
 }
-.popup h1 { font-size: 5rem; }
+.popup h1 { font-size: 5rem; margin: 0; }
 .popup button { margin-top: 15px; }
 </style>
 </head>
@@ -165,7 +170,7 @@ button:hover { background: #ff4081; }
 <div class="container" id="mainContent">
     <div class="spotify-embed">
         <iframe 
-            src="https://open.spotify.com/embed/track/6v4OWxDDulyvjWfRXPjA8Y?utm_source=generator&theme=0" 
+            src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGvPBm9s?utm_source=generator" 
             width="100%" 
             height="80" 
             frameborder="0" 
@@ -230,8 +235,10 @@ function fadeTo(newContent){
     setTimeout(()=>{
         stepContent.innerHTML=newContent;
         stepContent.classList.add("show");
-        stepContent.querySelectorAll("button,h1").forEach(el=>{
-            setInterval(()=>createTeddy(el), 1500);
+        // Re-attach teddy listeners to new elements
+        const targets = stepContent.querySelectorAll("button, h1");
+        targets.forEach(el => {
+            setInterval(() => createTeddy(el), 1500);
         });
     },300);
 }
@@ -247,18 +254,19 @@ function showPopup(message, callback){
     });
 }
 
-// Logic updates
+// Event Delegation for Button Logic
 stepContent.addEventListener("click", e=>{
-    if(e.target.id==="noBtn") fadeTo(`<h1>There you tharki aurat 😏</h1><p>Go back and click Yes!</p><button id="backBtn">Go Back</button>`);
-    else if(e.target.id==="backBtn") showYesStep();
-    else if(e.target.id==="yesBtn") showBestFriendStep();
-    else if(e.target.id==="tanveerBtn") showPrettyStep();
-    else if(e.target.id==="otherBtn") showPopup("You are only mine!", showBestFriendStep);
-    else if(e.target.id==="tanveerPrettyBtn") showFinalPrettyStep();
-    else if(e.target.id==="sakuBtn") showPopup("Self obsessed janwar, go back! It's about truth", showPrettyStep);
-    else if(e.target.id==="nextBtn") showMessageStep();
-    else if(e.target.id==="continueBtn") showVideoStep(); // Path changed to video
-    else if(e.target.id==="toFinalBtn") showFinalStep();
+    const id = e.target.id;
+    if(id === "noBtn") fadeTo(`<h1>There you tharki aurat 😏</h1><p>Go back and click Yes!</p><button id="backBtn">Go Back</button>`);
+    else if(id === "backBtn") showYesStep();
+    else if(id === "yesBtn") showBestFriendStep();
+    else if(id === "tanveerBtn") showPrettyStep();
+    else if(id === "otherBtn") showPopup("You are only mine!", showBestFriendStep);
+    else if(id === "tanveerPrettyBtn") showFinalPrettyStep();
+    else if(id === "sakuBtn") showPopup("Self obsessed janwar, go back! It's about truth", showPrettyStep);
+    else if(id === "nextBtn") showMessageStep();
+    else if(id === "continueBtn") showVideoStep(); 
+    else if(id === "toFinalBtn") showFinalStep();
 });
 
 function showYesStep(){ fadeTo(`<h1>Do you love me? 💖</h1><button id="yesBtn">Yes</button>`);}
@@ -270,16 +278,16 @@ function showMessageStep(){
     fadeTo(`<div id="message">Happiest Birthday! Aaj aapka din hai, par sach toh ye hai ki aapka meri life mein hona mere liye kisi gift se kam nahi hai. <br><br><strong>Agar aap meri life mein na aate, toh shayad hi main kabhi mentally recover ho pata.</strong> <br><br>Aapne mujhe us waqt sambhala jab sab kuch bikhra hua tha. Aapka presence mere liye wo sukoon hai jo har kisi ko naseeb nahi hota. ❤️</div><button id="continueBtn">Continue</button>`);
 }
 
-// New Video Step
 function showVideoStep() {
     fadeTo(`
         <h1>Your Birthday Edit ✨</h1>
         <div class="video-container">
-            <video controls autoplay>
+            <video controls autoplay muted playsinline>
                 <source src="17162.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
+        <p style="font-size: 0.8rem;">(If video doesn't play, tap play or unmute!)</p>
         <button id="toFinalBtn">Next</button>
     `);
 }

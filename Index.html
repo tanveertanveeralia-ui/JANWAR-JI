@@ -13,7 +13,34 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #fff5f5 0%, #f0e7ff 100%);
     text-align: center;
-    overflow-x: hidden; /* allow vertical scroll */
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Floating Sparkles */
+.sparkle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    opacity: 0.9;
+    pointer-events: none;
+    animation: sparkleAnim linear infinite;
+    filter: drop-shadow(0 0 6px #fff);
+}
+@keyframes sparkleAnim {
+    0% { transform: translateY(0) scale(1); opacity: 0.8; }
+    100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
+}
+
+/* Fade animation */
+.fade {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+.fade.show {
+    opacity: 1;
 }
 
 /* Intro Screen */
@@ -37,6 +64,8 @@ body {
     padding: 40px 15px;
     max-width: 500px;
     margin: auto;
+    position: relative;
+    z-index: 1; /* make hearts & sparkles float over content */
 }
 
 .card {
@@ -45,6 +74,8 @@ body {
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(124, 77, 255, 0.15);
     margin-bottom: 25px;
+    position: relative;
+    z-index: 2;
 }
 
 .main-img {
@@ -68,21 +99,50 @@ body {
     border-left: 5px solid #7c4dff;
     text-align: left;
     line-height: 1.8;
+    position: relative;
+    z-index: 2;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 15px;
+    background: #7c4dff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+    z-index: 2;
+}
+button:hover {
+    background: #ff4081;
 }
 
 /* Floating Hearts */
 .heart {
     position: fixed;
     bottom: -20px;
-    font-size: 20px;
+    font-size: 24px;
     animation: floatUp linear infinite;
-    opacity: 0.8;
+    opacity: 0.9;
     pointer-events: none;
+    filter: drop-shadow(0 0 4px #ff69b4);
 }
-
 @keyframes floatUp {
     0% { transform: translateY(0) scale(1); }
     100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+}
+
+/* Spotify Embed */
+.spotify-embed {
+    margin: 20px 0;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.15);
+    position: relative;
+    z-index: 2;
 }
 </style>
 </head>
@@ -95,54 +155,34 @@ body {
 </div>
 
 <div class="container" id="mainContent">
-    <h1>Happy Birthday! 🎂</h1>
-
-    <div class="card">
-        <!-- YOUR NEW IMAGE -->
-        <img src="https://i.ibb.co/wZktFkVT/Screenshot-20260213-032716.png"
-             class="main-img"
-             alt="Special Memory">
-
-        <div class="quote">
-            "Yaad hai ye din?<br>
-            <strong>My night is getting more prettier because of this moment.</strong>"
-        </div>
-    </div>
-
-    <div id="message">
-        Happiest Birthday! Aaj aapka din hai, par sach toh ye hai ki aapka meri life mein hona mere liye kisi gift se kam nahi hai. <br><br>
-        <strong>Agar aap meri life mein na aate, toh shayad hi main kabhi mentally recover ho pata.</strong> <br><br>
-        Aapne mujhe us waqt sambhala jab sab kuch bikhra hua tha. Aapka presence mere liye wo sukoon hai jo har kisi ko naseeb nahi hota. ❤️
+    <!-- Step container -->
+    <div id="stepContent" class="fade show">
+        <!-- Step 1: Question -->
+        <h1>Do you love me? 💖</h1>
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
     </div>
 </div>
 
-<!-- 🎵 Music -->
-<audio id="bgMusic" loop>
-    <source src="Kotha_Koiyo_Na___Coke_Studio_Bangla___Season_2___Shiblu_Mredha_X_Aleya_Begum_X_Emon_Chowdhury(256k).mp3" type="audio/mpeg">
-</audio>
-
 <script>
+// Elements
 const intro = document.getElementById("intro");
 const main = document.getElementById("mainContent");
-const music = document.getElementById("bgMusic");
+const stepContent = document.getElementById("stepContent");
 
+// Start interaction on tap
 intro.addEventListener("click", () => {
-
-    // Play music (guaranteed because user tapped)
-    music.play();
-
     intro.style.display = "none";
     main.style.display = "block";
 
     // Confetti
-    confetti({
-        particleCount: 150,
-        spread: 70,
-        origin: { y: 0.6 }
-    });
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
     // Floating hearts
     setInterval(createHeart, 400);
+
+    // Floating sparkles
+    setInterval(createSparkle, 200);
 });
 
 function createHeart() {
@@ -151,9 +191,95 @@ function createHeart() {
     heart.innerHTML = "💖";
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+    heart.style.zIndex = 1000; // float above everything
     document.body.appendChild(heart);
-
     setTimeout(() => heart.remove(), 6000);
+}
+
+function createSparkle() {
+    const sparkle = document.createElement("div");
+    sparkle.classList.add("sparkle");
+    sparkle.style.left = Math.random() * 100 + "vw";
+    sparkle.style.animationDuration = (4 + Math.random() * 3) + "s";
+    sparkle.style.zIndex = 900; // float above content
+    document.body.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 6000);
+}
+
+// Fade helper
+function fadeTo(newContent) {
+    stepContent.classList.remove("show");
+    setTimeout(() => {
+        stepContent.innerHTML = newContent;
+        stepContent.classList.add("show");
+    }, 300);
+}
+
+// Step logic
+stepContent.addEventListener("click", (e) => {
+    if (e.target.id === "noBtn") {
+        fadeTo(`
+            <h1>There you tharki aurat 😏</h1>
+            <p>Go back and click Yes!</p>
+            <button id="backBtn">Go Back</button>
+        `);
+    } else if (e.target.id === "backBtn") {
+        showYesStep();
+    } else if (e.target.id === "yesBtn") {
+        showImageStep();
+    } else if (e.target.id === "nextBtn") {
+        showMessageStep();
+    } else if (e.target.id === "continueBtn") {
+        showFinalStep();
+    }
+});
+
+// Step functions
+function showYesStep() {
+    fadeTo(`
+        <h1>Do you love me? 💖</h1>
+        <button id="yesBtn">Yes</button>
+    `);
+}
+
+function showImageStep() {
+    fadeTo(`
+        <h1>You look very beautiful while sleeping 😴✨</h1>
+        <div class="card">
+            <img src="https://i.ibb.co/wZktFkVT/Screenshot-20260213-032716.png"
+                 class="main-img"
+                 alt="Special Memory">
+        </div>
+        <button id="nextBtn">Next</button>
+    `);
+}
+
+function showMessageStep() {
+    fadeTo(`
+        <div id="message">
+            Happiest Birthday! Aaj aapka din hai, par sach toh ye hai ki aapka meri life mein hona mere liye kisi gift se kam nahi hai. <br><br>
+            <strong>Agar aap meri life mein na aate, toh shayad hi main kabhi mentally recover ho pata.</strong> <br><br>
+            Aapne mujhe us waqt sambhala jab sab kuch bikhra hua tha. Aapka presence mere liye wo sukoon hai jo har kisi ko naseeb nahi hota. ❤️
+        </div>
+        <button id="continueBtn">Continue</button>
+    `);
+}
+
+function showFinalStep() {
+    fadeTo(`
+        <h1>Go to Tanveer and send him his fees</h1>
+        <p>He loves you more than you think! 💜</p>
+        <div class="spotify-embed">
+            <iframe 
+                src="https://open.spotify.com/embed/track/6v4OWxDDulyvjWfRXPjA8Y" 
+                width="100%" 
+                height="80" 
+                frameborder="0" 
+                allowtransparency="true" 
+                allow="encrypted-media">
+            </iframe>
+        </div>
+    `);
 }
 </script>
 

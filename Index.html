@@ -65,7 +65,7 @@ body {
     max-width: 500px;
     margin: auto;
     position: relative;
-    z-index: 1; /* make hearts & sparkles float over content */
+    z-index: 1;
 }
 
 .card {
@@ -155,9 +155,20 @@ button:hover {
 </div>
 
 <div class="container" id="mainContent">
+    <!-- Spotify embed at top -->
+    <div class="spotify-embed">
+        <iframe 
+            src="https://open.spotify.com/embed/track/6v4OWxDDulyvjWfRXPjA8Y" 
+            width="100%" 
+            height="80" 
+            frameborder="0" 
+            allowtransparency="true" 
+            allow="encrypted-media">
+        </iframe>
+    </div>
+
     <!-- Step container -->
     <div id="stepContent" class="fade show">
-        <!-- Step 1: Question -->
         <h1>Do you love me? 💖</h1>
         <button id="yesBtn">Yes</button>
         <button id="noBtn">No</button>
@@ -191,7 +202,7 @@ function createHeart() {
     heart.innerHTML = "💖";
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-    heart.style.zIndex = 1000; // float above everything
+    heart.style.zIndex = 1000;
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 6000);
 }
@@ -201,7 +212,7 @@ function createSparkle() {
     sparkle.classList.add("sparkle");
     sparkle.style.left = Math.random() * 100 + "vw";
     sparkle.style.animationDuration = (4 + Math.random() * 3) + "s";
-    sparkle.style.zIndex = 900; // float above content
+    sparkle.style.zIndex = 900;
     document.body.appendChild(sparkle);
     setTimeout(() => sparkle.remove(), 6000);
 }
@@ -269,16 +280,6 @@ function showFinalStep() {
     fadeTo(`
         <h1>Go to Tanveer and send him his fees</h1>
         <p>He loves you more than you think! 💜</p>
-        <div class="spotify-embed">
-            <iframe 
-                src="https://open.spotify.com/embed/track/6v4OWxDDulyvjWfRXPjA8Y" 
-                width="100%" 
-                height="80" 
-                frameborder="0" 
-                allowtransparency="true" 
-                allow="encrypted-media">
-            </iframe>
-        </div>
     `);
 }
 </script>

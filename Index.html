@@ -11,10 +11,18 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #fff5f5 0%, #f0e7ff 100%);
     text-align: center;
     overflow-x: hidden;
     position: relative;
+    background: linear-gradient(135deg, #ffe5f0, #f0f0ff);
+    animation: bgAnim 15s ease-in-out infinite alternate;
+}
+
+/* Animated background */
+@keyframes bgAnim {
+    0% { background: linear-gradient(135deg, #ffe5f0, #f0f0ff);}
+    50% { background: linear-gradient(135deg, #fff0d4, #f0fff5);}
+    100% { background: linear-gradient(135deg, #ffe5f0, #f0f0ff);}
 }
 
 /* Floating Sparkles */
@@ -34,20 +42,44 @@ body {
     100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
 }
 
+/* Floating Hearts */
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 24px;
+    animation: floatUp linear infinite;
+    opacity: 0.9;
+    pointer-events: none;
+    filter: drop-shadow(0 0 4px #ff69b4);
+}
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+}
+
+/* Teddy bounce on text/buttons */
+.teddy {
+    position: absolute;
+    font-size: 24px;
+    animation: jump 0.6s ease infinite alternate;
+    pointer-events: none;
+    z-index: 1200;
+}
+@keyframes jump {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-15px) scale(1.1);}
+    100% { transform: translateY(0); }
+}
+
 /* Fade animation */
-.fade {
-    opacity: 0;
-    transition: opacity 0.6s ease;
-}
-.fade.show {
-    opacity: 1;
-}
+.fade { opacity: 0; transition: opacity 0.6s ease; }
+.fade.show { opacity: 1; }
 
 /* Intro Screen */
 #intro {
     position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, #7c4dff, #ff4081);
+    background: linear-gradient(135deg, #ff8ce3, #8c52ff);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,6 +88,7 @@ body {
     text-align: center;
     z-index: 10;
     cursor: pointer;
+    user-select: none;
 }
 
 /* Main Content */
@@ -85,12 +118,6 @@ body {
     object-fit: contain;
 }
 
-.quote {
-    padding: 15px;
-    font-style: italic;
-    color: #555;
-}
-
 #message {
     margin-top: 20px;
     padding: 20px;
@@ -116,24 +143,7 @@ button {
     position: relative;
     z-index: 2;
 }
-button:hover {
-    background: #ff4081;
-}
-
-/* Floating Hearts */
-.heart {
-    position: fixed;
-    bottom: -20px;
-    font-size: 24px;
-    animation: floatUp linear infinite;
-    opacity: 0.9;
-    pointer-events: none;
-    filter: drop-shadow(0 0 4px #ff69b4);
-}
-@keyframes floatUp {
-    0% { transform: translateY(0) scale(1); }
-    100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
-}
+button:hover { background: #ff4081; }
 
 /* Spotify Embed */
 .spotify-embed {
@@ -144,21 +154,35 @@ button:hover {
     position: relative;
     z-index: 2;
 }
+
+/* Angry popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(124,77,255,0.3);
+    z-index: 9999;
+    text-align: center;
+}
+.popup h1 { font-size: 5rem; }
+.popup button { margin-top: 15px; }
 </style>
 </head>
 
 <body>
 
-<!-- 💜 Tap Screen -->
-<div id="intro">
-    Tap Anywhere ❤️
-</div>
+<div id="intro">Tap Anywhere ❤️</div>
 
 <div class="container" id="mainContent">
+
     <!-- Spotify embed at top -->
     <div class="spotify-embed">
         <iframe 
-            src="https://open.spotify.com/embed/track/6v4OWxDDulyvjWfRXPjA8Y" 
+            src="https://open.spotify.com/embed/track/6v4OWxDDulyvjWfRXPjA8Y?utm_source=generator&theme=0" 
             width="100%" 
             height="80" 
             frameborder="0" 
@@ -167,7 +191,6 @@ button:hover {
         </iframe>
     </div>
 
-    <!-- Step container -->
     <div id="stepContent" class="fade show">
         <h1>Do you love me? 💖</h1>
         <button id="yesBtn">Yes</button>
@@ -176,12 +199,11 @@ button:hover {
 </div>
 
 <script>
-// Elements
 const intro = document.getElementById("intro");
 const main = document.getElementById("mainContent");
 const stepContent = document.getElementById("stepContent");
 
-// Start interaction on tap
+// Start interaction
 intro.addEventListener("click", () => {
     intro.style.display = "none";
     main.style.display = "block";
@@ -189,100 +211,89 @@ intro.addEventListener("click", () => {
     // Confetti
     confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
-    // Floating hearts
+    // Hearts, sparkles, teddies
     setInterval(createHeart, 400);
-
-    // Floating sparkles
-    setInterval(createSparkle, 200);
+    setInterval(createSparkle, 250);
 });
 
+// Hearts
 function createHeart() {
     const heart = document.createElement("div");
     heart.classList.add("heart");
     heart.innerHTML = "💖";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-    heart.style.zIndex = 1000;
+    heart.style.left = Math.random()*100+"vw";
+    heart.style.animationDuration = (3+Math.random()*3)+"s";
     document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 6000);
+    setTimeout(()=>heart.remove(),6000);
 }
 
+// Sparkles
 function createSparkle() {
     const sparkle = document.createElement("div");
     sparkle.classList.add("sparkle");
-    sparkle.style.left = Math.random() * 100 + "vw";
-    sparkle.style.animationDuration = (4 + Math.random() * 3) + "s";
-    sparkle.style.zIndex = 900;
+    sparkle.style.left = Math.random()*100+"vw";
+    sparkle.style.animationDuration = (4+Math.random()*3)+"s";
     document.body.appendChild(sparkle);
-    setTimeout(() => sparkle.remove(), 6000);
+    setTimeout(()=>sparkle.remove(),6000);
+}
+
+// Teddy jumps on buttons and headings
+function createTeddy(element){
+    const teddy=document.createElement("div");
+    teddy.classList.add("teddy");
+    teddy.innerHTML="🧸";
+    const rect=element.getBoundingClientRect();
+    teddy.style.top=(rect.top + window.scrollY - 30)+"px";
+    teddy.style.left=(rect.left + rect.width/2 - 12)+"px";
+    document.body.appendChild(teddy);
+    setTimeout(()=>teddy.remove(), 1000);
 }
 
 // Fade helper
-function fadeTo(newContent) {
+function fadeTo(newContent){
     stepContent.classList.remove("show");
-    setTimeout(() => {
-        stepContent.innerHTML = newContent;
+    setTimeout(()=>{
+        stepContent.innerHTML=newContent;
         stepContent.classList.add("show");
-    }, 300);
+        // add teddy on all buttons
+        stepContent.querySelectorAll("button,h1").forEach(el=>{
+            setInterval(()=>createTeddy(el), 1500);
+        });
+    },300);
+}
+
+// Popups
+function showPopup(message, callback){
+    const popup=document.createElement("div");
+    popup.classList.add("popup");
+    popup.innerHTML=`<h1>😡</h1><p>${message}</p><button id="popupBtn">Go Back</button>`;
+    document.body.appendChild(popup);
+    document.getElementById("popupBtn").addEventListener("click",()=>{
+        popup.remove();
+        if(callback) callback();
+    });
 }
 
 // Step logic
-stepContent.addEventListener("click", (e) => {
-    if (e.target.id === "noBtn") {
-        fadeTo(`
-            <h1>There you tharki aurat 😏</h1>
-            <p>Go back and click Yes!</p>
-            <button id="backBtn">Go Back</button>
-        `);
-    } else if (e.target.id === "backBtn") {
-        showYesStep();
-    } else if (e.target.id === "yesBtn") {
-        showImageStep();
-    } else if (e.target.id === "nextBtn") {
-        showMessageStep();
-    } else if (e.target.id === "continueBtn") {
-        showFinalStep();
-    }
+stepContent.addEventListener("click", e=>{
+    if(e.target.id==="noBtn") fadeTo(`<h1>There you tharki aurat 😏</h1><p>Go back and click Yes!</p><button id="backBtn">Go Back</button>`);
+    else if(e.target.id==="backBtn") showYesStep();
+    else if(e.target.id==="yesBtn") showBestFriendStep();
+    else if(e.target.id==="tanveerBtn") showPrettyStep();
+    else if(e.target.id==="otherBtn") showPopup("You are only mine!", showBestFriendStep);
+    else if(e.target.id==="tanveerPrettyBtn") showFinalPrettyStep();
+    else if(e.target.id==="sakuBtn") showPopup("Self obsessed janwar, go back! It's about truth", showPrettyStep);
+    else if(e.target.id==="nextBtn") showMessageStep();
+    else if(e.target.id==="continueBtn") showFinalStep();
 });
 
-// Step functions
-function showYesStep() {
-    fadeTo(`
-        <h1>Do you love me? 💖</h1>
-        <button id="yesBtn">Yes</button>
-    `);
-}
-
-function showImageStep() {
-    fadeTo(`
-        <h1>You look very beautiful while sleeping 😴✨</h1>
-        <div class="card">
-            <img src="https://i.ibb.co/wZktFkVT/Screenshot-20260213-032716.png"
-                 class="main-img"
-                 alt="Special Memory">
-        </div>
-        <button id="nextBtn">Next</button>
-    `);
-}
-
-function showMessageStep() {
-    fadeTo(`
-        <div id="message">
-            Happiest Birthday! Aaj aapka din hai, par sach toh ye hai ki aapka meri life mein hona mere liye kisi gift se kam nahi hai. <br><br>
-            <strong>Agar aap meri life mein na aate, toh shayad hi main kabhi mentally recover ho pata.</strong> <br><br>
-            Aapne mujhe us waqt sambhala jab sab kuch bikhra hua tha. Aapka presence mere liye wo sukoon hai jo har kisi ko naseeb nahi hota. ❤️
-        </div>
-        <button id="continueBtn">Continue</button>
-    `);
-}
-
-function showFinalStep() {
-    fadeTo(`
-        <h1>Go to Tanveer and send him his fees</h1>
-        <p>He loves you more than you think! 💜</p>
-    `);
-}
+// Steps
+function showYesStep(){ fadeTo(`<h1>Do you love me? 💖</h1><button id="yesBtn">Yes</button>`);}
+function showBestFriendStep(){ fadeTo(`<h1>Who is your best friend? 💜</h1><button id="tanveerBtn">Tanveer</button><button id="otherBtn">Others</button>`);}
+function showPrettyStep(){ fadeTo(`<h1>Who is more pretty?</h1><button id="tanveerPrettyBtn">Tanveer</button><button id="sakuBtn">Saku</button>`);}
+function showFinalPrettyStep(){ fadeTo(`<h1>Who is more pretty?</h1><button id="tanveerPrettyBtn">Tanveer</button><button id="nextBtn">Next</button>`);}
+function showMessageStep(){ fadeTo(`<div id="message">Happiest Birthday! Aaj aapka din hai, par sach toh ye hai ki aapka meri life mein hona mere liye kisi gift se kam nahi hai. <br><br><strong>Agar aap meri life mein na aate, toh shayad hi main kabhi mentally recover ho pata.</strong> <br><br>Aapne mujhe us waqt sambhala jab sab kuch bikhra hua tha. Aapka presence mere liye wo sukoon hai jo har kisi ko naseeb nahi hota. ❤️</div><button id="continueBtn">Continue</button>`);}
+function showFinalStep(){ fadeTo(`<h1>Go to Tanveer and send him his fees</h1><p>He loves you more than you think!</p>`);}
 </script>
-
 </body>
 </html>

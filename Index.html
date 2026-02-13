@@ -10,37 +10,20 @@
 <style>
 body {
     margin: 0;
-    font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     text-align: center;
     overflow-x: hidden;
     position: relative;
     background: linear-gradient(135deg, #ffe5f0, #f0f0ff);
-    animation: bgAnim 20s ease-in-out infinite alternate;
-    color: #333;
+    animation: bgAnim 15s ease-in-out infinite alternate;
 }
 
-/* Animated background gradient */
 @keyframes bgAnim {
     0% { background: linear-gradient(135deg, #ffe5f0, #f0f0ff);}
     50% { background: linear-gradient(135deg, #fff0d4, #f0fff5);}
     100% { background: linear-gradient(135deg, #ffe5f0, #f0f0ff);}
 }
 
-/* Floating bubbles */
-.bubble {
-    position: fixed;
-    border-radius: 50%;
-    opacity: 0.3;
-    pointer-events: none;
-    animation: bubbleUp linear infinite;
-    z-index: 5;
-}
-@keyframes bubbleUp {
-    0% { transform: translateY(0) scale(1); }
-    100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
-}
-
-/* Floating Sparkles */
 .sparkle {
     position: fixed;
     width: 8px;
@@ -51,14 +34,12 @@ body {
     pointer-events: none;
     animation: sparkleAnim linear infinite;
     filter: drop-shadow(0 0 6px #fff);
-    z-index: 10;
 }
 @keyframes sparkleAnim {
     0% { transform: translateY(0) scale(1); opacity: 0.8; }
     100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
 }
 
-/* Floating Hearts */
 .heart {
     position: fixed;
     bottom: -20px;
@@ -66,49 +47,44 @@ body {
     animation: floatUp linear infinite;
     opacity: 0.9;
     pointer-events: none;
-    filter: drop-shadow(0 0 6px #ff69b4);
-    z-index: 11;
+    filter: drop-shadow(0 0 4px #ff69b4);
 }
 @keyframes floatUp {
     0% { transform: translateY(0) scale(1); }
     100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
 }
 
-/* Teddy bounce on text/buttons */
 .teddy {
     position: absolute;
-    font-size: 28px;
+    font-size: 24px;
     animation: jump 0.6s ease infinite alternate;
     pointer-events: none;
     z-index: 1200;
 }
 @keyframes jump {
     0% { transform: translateY(0); }
-    50% { transform: translateY(-20px) scale(1.1);}
+    50% { transform: translateY(-15px) scale(1.1);}
     100% { transform: translateY(0); }
 }
 
-/* Fade animation */
 .fade { opacity: 0; transition: opacity 0.6s ease; }
 .fade.show { opacity: 1; }
 
-/* Intro Screen */
 #intro {
     position: fixed;
     inset: 0;
-    z-index: 9999; /* On top of everything */
+    background: linear-gradient(135deg, #ff8ce3, #8c52ff);
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #ff8ce3, #8c52ff);
     color: white;
-    font-size: 1.7rem;
-    font-weight: bold;
+    font-size: 1.5rem;
     text-align: center;
+    z-index: 10;
     cursor: pointer;
+    user-select: none;
 }
 
-/* Main Content */
 .container {
     display: none;
     padding: 40px 15px;
@@ -118,62 +94,53 @@ body {
     z-index: 1;
 }
 
-.card {
-    background: white;
-    padding: 15px;
-    border-radius: 25px;
-    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.2);
-    margin-bottom: 25px;
-    position: relative;
-    z-index: 2;
-}
-
-.main-img {
+.video-container {
     width: 100%;
     border-radius: 15px;
-    max-height: 600px;
-    object-fit: contain;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.2);
+    margin-bottom: 20px;
+}
+
+video {
+    width: 100%;
+    display: block;
 }
 
 #message {
     margin-top: 20px;
     padding: 20px;
     background: white;
-    border-radius: 20px;
-    border-left: 5px solid #ff8ce3;
+    border-radius: 15px;
+    border-left: 5px solid #7c4dff;
     text-align: left;
     line-height: 1.8;
-    box-shadow: 0 8px 20px rgba(124,77,255,0.1);
+    position: relative;
+    z-index: 2;
 }
 
-/* Buttons */
 button {
-    padding: 12px 22px;
-    margin: 12px;
+    padding: 10px 20px;
+    margin: 10px;
     border: none;
-    border-radius: 20px;
-    background: #ff8ce3;
+    border-radius: 15px;
+    background: #7c4dff;
     color: white;
     font-weight: bold;
     cursor: pointer;
     transition: 0.2s;
-    font-size: 1rem;
     position: relative;
     z-index: 2;
 }
-button:hover { background: #8c52ff; }
+button:hover { background: #ff4081; }
 
-/* Spotify Embed */
 .spotify-embed {
-    margin: 20px 0;
+    margin-bottom: 20px;
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(124, 77, 255, 0.15);
-    position: relative;
-    z-index: 2;
 }
 
-/* Angry popup */
 .popup {
     position: fixed;
     top: 50%;
@@ -181,13 +148,13 @@ button:hover { background: #8c52ff; }
     transform: translate(-50%, -50%);
     background: white;
     padding: 25px;
-    border-radius: 25px;
+    border-radius: 20px;
     box-shadow: 0 10px 30px rgba(124,77,255,0.3);
     z-index: 9999;
     text-align: center;
 }
 .popup h1 { font-size: 5rem; }
-.popup button { margin-top: 15px; padding: 10px 20px; border-radius: 15px;}
+.popup button { margin-top: 15px; }
 </style>
 </head>
 
@@ -196,8 +163,6 @@ button:hover { background: #8c52ff; }
 <div id="intro">Tap Anywhere ❤️</div>
 
 <div class="container" id="mainContent">
-
-    <!-- Spotify embed at top -->
     <div class="spotify-embed">
         <iframe 
             src="https://open.spotify.com/embed/track/6v4OWxDDulyvjWfRXPjA8Y?utm_source=generator&theme=0" 
@@ -216,86 +181,61 @@ button:hover { background: #8c52ff; }
     </div>
 </div>
 
-<!-- Interaction sound -->
-<audio id="popSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="auto"></audio>
-
 <script>
-const intro=document.getElementById("intro");
-const main=document.getElementById("mainContent");
-const stepContent=document.getElementById("stepContent");
-const popSound=document.getElementById("popSound");
+const intro = document.getElementById("intro");
+const main = document.getElementById("mainContent");
+const stepContent = document.getElementById("stepContent");
 
-function playPop(){ popSound.currentTime=0; popSound.play(); }
-
-// Intro click
-intro.addEventListener("click",()=>{
-    intro.style.display="none";
-    main.style.display="block";
-
-    confetti({ particleCount: 150, spread: 70, origin: { y:0.6 } });
-
+intro.addEventListener("click", () => {
+    intro.style.display = "none";
+    main.style.display = "block";
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     setInterval(createHeart, 400);
     setInterval(createSparkle, 250);
-    setInterval(createBubble, 2000);
 });
 
-// Hearts, sparkles, bubbles
-function createHeart(){
-    const heart=document.createElement("div");
+function createHeart() {
+    const heart = document.createElement("div");
     heart.classList.add("heart");
-    heart.innerHTML="💖";
-    heart.style.left=Math.random()*100+"vw";
-    heart.style.animationDuration=(3+Math.random()*3)+"s";
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random()*100+"vw";
+    heart.style.animationDuration = (3+Math.random()*3)+"s";
     document.body.appendChild(heart);
     setTimeout(()=>heart.remove(),6000);
 }
-function createSparkle(){
-    const sparkle=document.createElement("div");
+
+function createSparkle() {
+    const sparkle = document.createElement("div");
     sparkle.classList.add("sparkle");
-    sparkle.style.left=Math.random()*100+"vw";
-    sparkle.style.animationDuration=(4+Math.random()*3)+"s";
+    sparkle.style.left = Math.random()*100+"vw";
+    sparkle.style.animationDuration = (4+Math.random()*3)+"s";
     document.body.appendChild(sparkle);
     setTimeout(()=>sparkle.remove(),6000);
 }
-function createBubble(){
-    const bubble=document.createElement("div");
-    bubble.classList.add("bubble");
-    bubble.style.width=(10+Math.random()*30)+"px";
-    bubble.style.height=bubble.style.width;
-    bubble.style.background=`rgba(255,255,255,${0.1+Math.random()*0.3})`;
-    bubble.style.left=Math.random()*100+"vw";
-    bubble.style.animationDuration=(6+Math.random()*5)+"s";
-    document.body.appendChild(bubble);
-    setTimeout(()=>bubble.remove(),11000);
-}
 
-// Teddy jumps
 function createTeddy(element){
+    if(!element) return;
     const teddy=document.createElement("div");
     teddy.classList.add("teddy");
     teddy.innerHTML="🧸";
     const rect=element.getBoundingClientRect();
-    teddy.style.top=(rect.top + window.scrollY - 25)+"px";
-    teddy.style.left=(rect.left + rect.width/2 - 14)+"px";
+    teddy.style.top=(rect.top + window.scrollY - 30)+"px";
+    teddy.style.left=(rect.left + rect.width/2 - 12)+"px";
     document.body.appendChild(teddy);
-    setTimeout(()=>teddy.remove(),1000);
-    playPop();
+    setTimeout(()=>teddy.remove(), 1000);
 }
 
-// Fade helper
 function fadeTo(newContent){
     stepContent.classList.remove("show");
     setTimeout(()=>{
         stepContent.innerHTML=newContent;
         stepContent.classList.add("show");
         stepContent.querySelectorAll("button,h1").forEach(el=>{
-            el.addEventListener("click",playPop);
-            setInterval(()=>createTeddy(el),1500);
+            setInterval(()=>createTeddy(el), 1500);
         });
     },300);
 }
 
-// Popups
 function showPopup(message, callback){
     const popup=document.createElement("div");
     popup.classList.add("popup");
@@ -304,13 +244,11 @@ function showPopup(message, callback){
     document.getElementById("popupBtn").addEventListener("click",()=>{
         popup.remove();
         if(callback) callback();
-        playPop();
     });
 }
 
-// Step logic
-stepContent.addEventListener("click",e=>{
-    playPop();
+// Logic updates
+stepContent.addEventListener("click", e=>{
     if(e.target.id==="noBtn") fadeTo(`<h1>There you tharki aurat 😏</h1><p>Go back and click Yes!</p><button id="backBtn">Go Back</button>`);
     else if(e.target.id==="backBtn") showYesStep();
     else if(e.target.id==="yesBtn") showBestFriendStep();
@@ -319,16 +257,36 @@ stepContent.addEventListener("click",e=>{
     else if(e.target.id==="tanveerPrettyBtn") showFinalPrettyStep();
     else if(e.target.id==="sakuBtn") showPopup("Self obsessed janwar, go back! It's about truth", showPrettyStep);
     else if(e.target.id==="nextBtn") showMessageStep();
-    else if(e.target.id==="continueBtn") showFinalStep();
+    else if(e.target.id==="continueBtn") showVideoStep(); // Path changed to video
+    else if(e.target.id==="toFinalBtn") showFinalStep();
 });
 
-// Steps
 function showYesStep(){ fadeTo(`<h1>Do you love me? 💖</h1><button id="yesBtn">Yes</button>`);}
 function showBestFriendStep(){ fadeTo(`<h1>Who is your best friend? 💜</h1><button id="tanveerBtn">Tanveer</button><button id="otherBtn">Others</button>`);}
 function showPrettyStep(){ fadeTo(`<h1>Who is more pretty?</h1><button id="tanveerPrettyBtn">Tanveer</button><button id="sakuBtn">Saku</button>`);}
 function showFinalPrettyStep(){ fadeTo(`<h1>Who is more pretty?</h1><button id="tanveerPrettyBtn">Tanveer</button><button id="nextBtn">Next</button>`);}
-function showMessageStep(){ fadeTo(`<div id="message">Happiest Birthday! Aaj aapka din hai, par sach toh ye hai ki aapka meri life mein hona mere liye kisi gift se kam nahi hai. <br><br><strong>Agar aap meri life mein na aate, toh shayad hi main kabhi mentally recover ho pata.</strong> <br><br>Aapne mujhe us waqt sambhala jab sab kuch bikhra hua tha. Aapka presence mere liye wo sukoon hai jo har kisi ko naseeb nahi hota. ❤️</div><button id="continueBtn">Continue</button>`);}
-function showFinalStep(){ fadeTo(`<h1>Go to Tanveer and send him his fees</h1><p>He loves you more than you think!</p>`);}
+
+function showMessageStep(){ 
+    fadeTo(`<div id="message">Happiest Birthday! Aaj aapka din hai, par sach toh ye hai ki aapka meri life mein hona mere liye kisi gift se kam nahi hai. <br><br><strong>Agar aap meri life mein na aate, toh shayad hi main kabhi mentally recover ho pata.</strong> <br><br>Aapne mujhe us waqt sambhala jab sab kuch bikhra hua tha. Aapka presence mere liye wo sukoon hai jo har kisi ko naseeb nahi hota. ❤️</div><button id="continueBtn">Continue</button>`);
+}
+
+// New Video Step
+function showVideoStep() {
+    fadeTo(`
+        <h1>Your Birthday Edit ✨</h1>
+        <div class="video-container">
+            <video controls autoplay>
+                <source src="17162.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <button id="toFinalBtn">Next</button>
+    `);
+}
+
+function showFinalStep(){ 
+    fadeTo(`<h1>Go to Tanveer and send him his fees</h1><p>He loves you more than you think!</p>`);
+}
 </script>
 </body>
 </html>

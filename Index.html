@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You ✨</title>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #fff5f5 0%, #f0e7ff 100%);
+    text-align: center;
+    overflow-x: hidden; /* allow vertical scroll */
+}
+
+/* Intro Screen */
+#intro {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #7c4dff, #ff4081);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    z-index: 10;
+    cursor: pointer;
+}
+
+/* Main Content */
+.container {
+    display: none;
+    padding: 40px 15px;
+    max-width: 500px;
+    margin: auto;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(124, 77, 255, 0.15);
+    margin-bottom: 25px;
+}
+
+.main-img {
+    width: 100%;
+    border-radius: 15px;
+    max-height: 600px;
+    object-fit: contain;
+}
+
+.quote {
+    padding: 15px;
+    font-style: italic;
+    color: #555;
+}
+
+#message {
+    margin-top: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    border-left: 5px solid #7c4dff;
+    text-align: left;
+    line-height: 1.8;
+}
+
+/* Floating Hearts */
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp linear infinite;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 💜 Tap Screen -->
+<div id="intro">
+    Tap Anywhere ❤️
+</div>
+
+<div class="container" id="mainContent">
+    <h1>Happy Birthday! 🎂</h1>
+
+    <div class="card">
+        <!-- YOUR NEW IMAGE -->
+        <img src="https://i.ibb.co/wZktFkVT/Screenshot-20260213-032716.png"
+             class="main-img"
+             alt="Special Memory">
+
+        <div class="quote">
+            "Yaad hai ye din?<br>
+            <strong>My night is getting more prettier because of this moment.</strong>"
+        </div>
+    </div>
+
+    <div id="message">
+        Happiest Birthday! Aaj aapka din hai, par sach toh ye hai ki aapka meri life mein hona mere liye kisi gift se kam nahi hai. <br><br>
+        <strong>Agar aap meri life mein na aate, toh shayad hi main kabhi mentally recover ho pata.</strong> <br><br>
+        Aapne mujhe us waqt sambhala jab sab kuch bikhra hua tha. Aapka presence mere liye wo sukoon hai jo har kisi ko naseeb nahi hota. ❤️
+    </div>
+</div>
+
+<!-- 🎵 Music -->
+<audio id="bgMusic" loop>
+    <source src="Kotha_Koiyo_Na___Coke_Studio_Bangla___Season_2___Shiblu_Mredha_X_Aleya_Begum_X_Emon_Chowdhury(256k).mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const intro = document.getElementById("intro");
+const main = document.getElementById("mainContent");
+const music = document.getElementById("bgMusic");
+
+intro.addEventListener("click", () => {
+
+    // Play music (guaranteed because user tapped)
+    music.play();
+
+    intro.style.display = "none";
+    main.style.display = "block";
+
+    // Confetti
+    confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+    });
+
+    // Floating hearts
+    setInterval(createHeart, 400);
+});
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 6000);
+}
+</script>
+
+</body>
+</html>
